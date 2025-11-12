@@ -12,7 +12,6 @@ const els = {
   progressPill: document.getElementById("progressPill"),
   difficultyPill: document.getElementById("difficultyPill"),
   elapsedPill: document.getElementById("elapsedPill"),
-  qBar: document.getElementById("qBar"),
   qProgLabel: document.getElementById("qProgLabel"),
 
   // Home
@@ -340,17 +339,10 @@ function buildQuizSubset(groups, count, difficulty){
   return qs.length ? qs : [];
 }
 
-function barColorFromRatio(r){
-  const hue = Math.max(0, Math.min(120, Math.round(120*r))); // 120->0 green->red
-  return `hsl(${hue} 65% 45%)`;
-}
+
 function updateProgressBar(){
   const rem = QSTATE.countdownRemaining ?? 0;
-  const total = QSTATE.countdownTotal ?? 1;
-  const ratio = Math.max(0, Math.min(1, rem/total));
-  els.qBar.style.width = `${ratio*100}%`;
-  els.qBar.style.backgroundColor = barColorFromRatio(ratio);
-  els.qProgLabel.textContent = rem>0 ? `Question timer: ${fmtMMSS(rem)}` : `Worth HALF!`;
+  els.qProgLabel.textContent = rem>0 ? `Question Timer: ${fmtMMSS(rem)}` : `Worth HALF!`;
 }
 function perQuestionSeconds(q){
   // Hard: single 10s / multi 5s

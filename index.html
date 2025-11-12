@@ -14,26 +14,19 @@
       <div style="display:inline-flex; width:100%; justify-content: space-between;">
         <div>
         <h1>Drug Name Quiz</h1>
-          <div class="brand-sub">Test or learn drug knowledge(Class • Generic • Brand)</div>
+          <div class="brand-sub" style="font-size: 0.75rem;">Test or learn drug knowledge (Class • Generic • Brand)</div>
         </div>
-          <div class="brand-sub">Contributers: <br>3mar1236 [Github]<br>ChatGPT-5 [OpenAI]</div>
+          <div class="brand-sub" style="font-size: 0.5rem;">Contributers: <br>3mar1236 [Github]<br>ChatGPT-5 [OpenAI]</div>
       </div>
 
     </div>
 
     <!-- Status bar (visible during quiz) -->
     <div id="status" class="status hidden">
-      <div class="row">
+      <div class="row" style="width: 100%; ;justify-content: space-evenly;">
         <span class="pill" id="scorePill">Score: 0</span>
         <span class="pill" id="progressPill">Ready</span>
         <span class="pill" id="difficultyPill">Difficulty: —</span>
-      </div>
-      <div class="row grow">
-        <!-- Per-question progress bar takes remaining horizontal space -->
-        <div id="qProgress" class="qprogress">
-          <div id="qBar" class="qbar"></div>
-          <div id="qProgLabel" class="qprogress-label"></div>
-        </div>
         <span class="pill" id="elapsedPill">Elapsed: 00:00</span>
       </div>
     </div>
@@ -114,6 +107,8 @@
       <div class="card question-card">
         <div class="meta-row">
           <div id="qType" class="muted"></div>
+          <span class="pill" id="qProgLabel">Elapsed: 00:00</span>
+
         </div>
         <h2 id="questionText"></h2>
         <div id="focusBox" class="big-box hidden"></div>
