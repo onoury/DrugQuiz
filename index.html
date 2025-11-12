@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Trap Quiz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- Logo / Name -->
+    <div class="brand-card">
+      
+      <div style="display:inline-flex; width:100%; justify-content: space-between;">
+        <div>
+        <h1>Drug Name Quiz</h1>
+          <div class="brand-sub">Test or learn drug knowledge(Class • Generic • Brand)</div>
+        </div>
+          <div class="brand-sub">Contributers: <br>3mar1236 [Github]<br>ChatGPT-5 [OpenAI]</div>
+      </div>
+
+    </div>
+
+    <!-- Status bar (visible during quiz) -->
+    <div id="status" class="status hidden">
+      <div class="row">
+        <span class="pill" id="scorePill">Score: 0</span>
+        <span class="pill" id="progressPill">Ready</span>
+        <span class="pill" id="difficultyPill">Difficulty: —</span>
+      </div>
+      <div class="row grow">
+        <!-- Per-question progress bar takes remaining horizontal space -->
+        <div id="qProgress" class="qprogress">
+          <div id="qBar" class="qbar"></div>
+          <div id="qProgLabel" class="qprogress-label"></div>
+        </div>
+        <span class="pill" id="elapsedPill">Elapsed: 00:00</span>
+      </div>
+    </div>
+
+    <!-- HOME: choose Learn or Quiz -->
+    <section id="home" class="grid one">
+      <div class="card">
+        <h3>Choose a mode</h3>
+        <div class="mode-buttons">
+          <button id="goLearn" class="secondary big">Learn</button>
+          <button id="goQuiz" class="big">Take the Quiz</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ LANDING -->
+    <section id="landing" class="grid one hidden">
+      <div class="card">
+        <h3>Start</h3>
+        <div class="stack">
+          <div>
+            <div class="label">Difficulty</div>
+            <div class="segmented" role="radiogroup" aria-label="Difficulty">
+              <input type="radio" id="diff-medium" name="difficulty" value="medium" checked>
+              <label for="diff-medium">Medium</label>
+              <input type="radio" id="diff-hard" name="difficulty" value="hard">
+              <label for="diff-hard">Hard</label>
+            </div>
+          </div>
+
+          <div>
+            <div class="label">Question count</div>
+            <div class="segmented" role="radiogroup" aria-label="Question count">
+              <input type="radio" id="q-15" name="qcount" value="15">
+              <label for="q-15">15</label>
+              <input type="radio" id="q-30" name="qcount" value="30" checked>
+              <label for="q-30">30</label>
+              <input type="radio" id="q-45" name="qcount" value="45">
+              <label for="q-45">45</label>
+              <input type="radio" id="q-60" name="qcount" value="60">
+              <label for="q-60">60</label>
+            </div>
+          </div>
+
+          <div class="row wrap">
+            <span id="quizSelSummary" class="pill">Categories: All</span>
+            <button id="openQuizCats" class="secondary">Choose categories</button>
+          </div>
+
+          <div class="row wrap">
+            <button id="startBtn">Start Quiz</button>
+            <button id="backHome1" class="ghost">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Top 10 High Scores</h3>
+        <div class="scoreboard">
+          <table id="scoreTable">
+            <thead>
+              <tr>
+                <th>#</th><th>Initials</th><th>Score</th><th>Questions</th><th>Difficulty</th><th>Elapsed</th><th>Date</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="row wrap mt8">
+          <button class="secondary" id="downloadCSV">Download highscores.csv</button>
+          <button class="ghost" id="clearScores">Clear scores</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="quiz" class="hidden">
+      <div class="card question-card">
+        <div class="meta-row">
+          <div id="qType" class="muted"></div>
+        </div>
+        <h2 id="questionText"></h2>
+        <div id="focusBox" class="big-box hidden"></div>
+        <div class="options" id="options"></div>
+
+        <div class="foot-row">
+          <div class="muted" id="feedback"></div>
+          <div class="row">
+            <button id="backBtn" class="ghost">Back</button>
+            <button id="submitBtn" class="hidden">Submit</button>
+            <button id="nextBtn" class="secondary" disabled>Next</button>
+            <button id="quitBtn" class="ghost">Quit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUIZ FINISH -->
+    <section id="finish" class="hidden">
+      <div class="card">
+        <h3 class="mt0">Final Score: <span id="finalScore"></span></h3>
+        <div class="row wrap">
+          <label>Enter initials:
+            <input id="initials" maxlength="4" placeholder="ABC" />
+          </label>
+          <button id="saveScore">Save Score</button>
+          <button id="playAgain" class="secondary">Play again</button>
+          <button id="backHome2" class="ghost">Home</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARN LANDING -->
+    <section id="learnLanding" class="grid one hidden">
+      <div class="card">
+        <h3>Learn</h3>
+        <div class="stack">
+          <div class="segmented" role="radiogroup" aria-label="Learn Mode">
+            <input type="radio" id="learn-all" name="learnmode" value="all" checked>
+            <label for="learn-all">Learn from all the data</label>
+            <input type="radio" id="learn-select" name="learnmode" value="select">
+            <label for="learn-select">Select categories</label>
+          </div>
+
+          <!-- Category picker (inline for learn) -->
+          <div id="learnCatPanel" class="cat-panel hidden">
+            <div class="row wrap">
+              <input id="learnCatSearch" class="search" placeholder="Search categories…" />
+              <button id="learnSelectAll" class="ghost">Select all</button>
+              <button id="learnClearAll" class="ghost">Clear</button>
+              <button id="startLearnSelected" class="secondary">Continue</button>
+            </div>
+            <div class="cat-table-wrap">
+              <table class="cat-table" id="learnCatTable">
+                <thead><tr><th></th><th>Category</th><th>Items</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="row wrap">
+            <button id="startLearnAll">Start Learning</button>
+            <button id="backHome3" class="ghost">Back</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARN FLASHCARDS -->
+    <section id="learnFlash" class="grid one hidden">
+      <div class="card">
+        <div class="row wrap between">
+          <div class="muted" id="learnProgress">Card 1 of 1</div>
+          <div class="row wrap">
+            <input id="genFilter" class="search small" placeholder="Filter generics…" />
+            <select id="genericSelect" class="select"></select>
+            <button id="jumpGeneric" class="secondary">Go</button>
+            <button id="backToLearn" class="ghost">Back</button>
+          </div>
+        </div>
+
+        <div class="flashcard" id="flashcard">
+          <!-- FRONT -->
+          <div class="face front" id="cardFront">
+            <div class="generic-big" id="fcGenericFront"></div>
+            <button id="flipBtn" class="flip-btn">Flip</button>
+          </div>
+          <!-- BACK -->
+          <div class="face back hidden" id="cardBack">
+            <div class="fc-header" id="fcGenericBack"></div>
+            <div class="fc-grid">
+              <div>
+                <div class="fc-label">Class</div>
+                <div class="fc-body" id="fcClass"></div>
+              </div>
+              <div>
+                <div class="fc-label">Brand names</div>
+                <div class="fc-body" id="fcBrands"></div>
+              </div>
+            </div>
+            <button id="flipBackBtn" class="flip-btn">Flip</button>
+          </div>
+        </div>
+
+        <div class="row center gap">
+          <button id="prevCard" class="ghost">Prev</button>
+          <button id="nextCard" class="secondary">Next</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- QUIZ CATEGORY MODAL -->
+  <div id="quizCatModal" class="modal hidden">
+    <div class="dialog">
+      <div class="dialog-head">
+        <h4>Select categories for the quiz</h4>
+        <button id="closeQuizCats" class="ghost">Close</button>
+      </div>
+      <div class="row wrap">
+        <input id="quizCatSearch" class="search" placeholder="Search categories…" />
+        <button id="quizSelectAll" class="ghost">Select all</button>
+        <button id="quizClearAll" class="ghost">Clear</button>
+      </div>
+      <div class="cat-table-wrap">
+        <table class="cat-table" id="quizCatTable">
+          <thead><tr><th></th><th>Category</th><th>Items</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row right">
+        <button id="applyQuizCats" class="secondary">Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confetti-wrap" id="confetti"></div>
+  <script src="script.js"></script>
+</body>
+</html>
