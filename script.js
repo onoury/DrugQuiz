@@ -375,7 +375,7 @@ function perQuestionSeconds(q){
   return q.multi ? multi : single;
 }
 function startPerQuestionCountdown(i){
-  if(QSTATE.difficulty === "easy"){ // Amrita Mode => no question timer
+  if(QSTATE.difficulty === "Amrita"){ // Amrita Mode => no question timer
     els.qProgLabel.textContent = "No question timer (Amrita Mode)";
     return;
   }
@@ -394,7 +394,7 @@ function startPerQuestionCountdown(i){
       if(!ans.submitted) ans.timedOut = true;
     }
     const label = (QSTATE.countdownRemaining>0) ? `Question Timer: ${fmtMMSS(QSTATE.countdownRemaining)}` : `Time! (half-credit if correct)`;
-    els.qProgLabel.textContent = (QSTATE.difficulty==="easy") ? "No question timer (Amrita Mode)" : label;
+    els.qProgLabel.textContent = (QSTATE.difficulty==="Amrita") ? "No question timer (Amrita Mode)" : label;
   }, 1000);
 }
 
@@ -471,12 +471,12 @@ function lockCurrentQuestionUI(q, ans){
     }
   });
   els.submitBtn.classList.add("hidden");
-  const halfText = (QSTATE.difficulty==="easy") ? "" : (ans.award===1 ? "" : " (half-credit due to time)");
+  const halfText = (QSTATE.difficulty==="Amrita") ? "" : (ans.award===1 ? "" : " (half-credit due to time)");
   els.feedback.textContent = ans.correct ? `Correct.${halfText}` : "Not correct.";
 }
 
 function scheduleAutoAdvance(){
-  if(QSTATE.difficulty==="easy") return; // Amrita Mode: NO auto-next
+  if(QSTATE.difficulty==="Amrita") return; // Amrita Mode: NO auto-next
   if(QSTATE.autoAdvanceTimeout) clearTimeout(QSTATE.autoAdvanceTimeout);
   const idxAt = QSTATE.idx;
   QSTATE.autoAdvanceTimeout = setTimeout(()=>{
@@ -494,7 +494,7 @@ function handleSingleChoice(idx){
 
   const picked = q.options[idx].value;
   const correct = q.correct.has(picked);
-  const award = correct ? ((QSTATE.difficulty==="easy") ? 1 : (ans.timedOut ? 0.5 : 1)) : 0;
+  const award = correct ? ((QSTATE.difficulty==="Amrita") ? 1 : (ans.timedOut ? 0.5 : 1)) : 0;
 
   ans.submitted = true; ans.picked = picked; ans.correct = correct; ans.award = award;
   QSTATE.score += award;
@@ -514,7 +514,7 @@ function handleSubmitMulti(){
   const checks = [...els.options.querySelectorAll('input[type=checkbox]')];
   const chosen = new Set(checks.filter(c=>c.checked).map(c=>q.options[+c.dataset.i].value));
   const correct = JSON.stringify([...chosen].sort()) === JSON.stringify([...q.correct].sort());
-  const award = correct ? ((QSTATE.difficulty==="easy") ? 1 : (ans.timedOut ? 0.5 : 1)) : 0;
+  const award = correct ? ((QSTATE.difficulty==="Amrita") ? 1 : (ans.timedOut ? 0.5 : 1)) : 0;
 
   ans.submitted = true; ans.picked = chosen; ans.correct = correct; ans.award = award;
   QSTATE.score += award;
@@ -569,7 +569,7 @@ function startQuiz(){
   QSTATE.elapsedInterval = setInterval(()=>{
     const secs = Math.floor((Date.now()-QSTATE.startedAt)/1000);
     els.elapsedPill.textContent = `Elapsed: ${fmtMMSS(secs)}`;
-    if(QSTATE.difficulty==="easy"){ els.qProgLabel.textContent = "No question timer (Amrita Mode)"; }
+    if(QSTATE.difficulty==="Amrita"){ els.qProgLabel.textContent = "No question timer (Amrita Mode)"; }
   }, 500);
 
   setQuizView();
@@ -586,7 +586,10 @@ function finishQuiz(){
 function saveScore(){
   const initials = (els.initials.value||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,4) || "AAA";
   const elapsedSecs = Math.floor((Date.now()-QSTATE.startedAt)/1000);
-  const entry = { initials, score: QSTATE.score, qcount: QSTATE.qList.length, difficulty: QSTATE.difficulty, elapsed: elapsedSecs, date: new Date().toISOString().slice(0,10) };
+  var entry = { initials, score: QSTATE.score, qcount: QSTATE.qList.length, difficulty: QSTATE.difficulty, elapsed: elapsedSecs, date: new Date().toISOString().slice(0,10) };
+  if (QSTATE.difficulty=="Amrita") {
+  entry = { initials, score: QSTATE.score, qcount: QSTATE.qList.length, difficulty: "Amrita's'", elapsed: elapsedSecs, date: new Date().toISOString().slice(0,10) };
+  }
   const store = JSON.parse(localStorage.getItem("trapquiz_scores")||"[]");
   store.push(entry);
   store.sort((a,b)=> b.score - a.score || a.elapsed - b.elapsed);

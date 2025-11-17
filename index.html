@@ -43,9 +43,9 @@
           <div>
             <div class="label">Difficulty</div>
             <div class="segmented" role="radiogroup" aria-label="Difficulty">
-              <input type="radio" id="diff-easy" name="difficulty" value="easy">
-              <label for="diff-easy">Amrita Mode</label>
-              <input type="radio" id="diff-medium" name="difficulty" value="medium" checked>
+              <input type="radio" id="diff-easy" name="difficulty" value="Amrita" checked>
+              <label for="diff-easy">Amrita's Difficulty</label>
+              <input type="radio" id="diff-medium" name="difficulty" value="medium">
               <label for="diff-medium">Medium</label>
               <input type="radio" id="diff-hard" name="difficulty" value="hard">
               <label for="diff-hard">Hard</label>
@@ -55,14 +55,14 @@
           <div>
             <div class="label">Question count</div>
             <div class="segmented" role="radiogroup" aria-label="Question count">
-              <input type="radio" id="q-15" name="qcount" value="15">
-              <label for="q-15">15</label>
-              <input type="radio" id="q-30" name="qcount" value="30" checked>
-              <label for="q-30">30</label>
-              <input type="radio" id="q-45" name="qcount" value="45">
-              <label for="q-45">45</label>
-              <input type="radio" id="q-60" name="qcount" value="60">
-              <label for="q-60">60</label>
+              <input type="radio" id="q-15" name="qcount" value="10">
+              <label for="q-15">10</label>
+              <input type="radio" id="q-30" name="qcount" value="15" checked>
+              <label for="q-30">15</label>
+              <input type="radio" id="q-45" name="qcount" value="20">
+              <label for="q-45">20</label>
+              <input type="radio" id="q-60" name="qcount" value="25">
+              <label for="q-60">25</label>
             </div>
           </div>
 
@@ -72,8 +72,8 @@
           </div>
 
           <div class="row wrap">
-            <button id="startBtn">Start Quiz</button>
             <button id="backHome1" class="ghost">Back</button>
+            <button id="startBtn" style="padding-inline: 40px;">Start Quiz</button>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@
           <div id="qType" class="muted"></div>
           <span class="pill" id="qProgLabel">Elapsed: 00:00</span>
         </div>
-        <h2 id="questionText"></h2>
+        <h2 id="questionText" style="text-align: left !important;"></h2>
         <div id="focusBox" class="big-box hidden"></div>
         <div class="options" id="options"></div>
 
