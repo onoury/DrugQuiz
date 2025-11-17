@@ -8,22 +8,15 @@
 </head>
 <body>
   <div class="app">
-    <!-- Logo / Name -->
+    <!-- Brand / Header -->
     <div class="brand-card">
-      
-      <div style="display:inline-flex; width:100%; justify-content: space-between;">
-        <div>
-        <h1>Drug Name Quiz</h1>
-          <div class="brand-sub" style="font-size: 0.75rem;">Test or learn drug knowledge (Class • Generic • Brand)</div>
-        </div>
-          <div class="brand-sub" style="font-size: 0.5rem;">Contributers: <br>3mar1236 [Github]<br>ChatGPT-5 [OpenAI]</div>
-      </div>
-
+      <h1>Trap Quiz</h1>
+      <div class="brand-sub">Class • Generic • Brand — Learn & Quiz</div>
     </div>
 
-    <!-- Status bar (visible during quiz) -->
+    <!-- Status (during quiz) -->
     <div id="status" class="status hidden">
-      <div class="row" style="width: 100%; ;justify-content: space-evenly;">
+      <div class="row" style="width:100%;justify-content:space-evenly;">
         <span class="pill" id="scorePill">Score: 0</span>
         <span class="pill" id="progressPill">Ready</span>
         <span class="pill" id="difficultyPill">Difficulty: —</span>
@@ -31,7 +24,7 @@
       </div>
     </div>
 
-    <!-- HOME: choose Learn or Quiz -->
+    <!-- HOME -->
     <section id="home" class="grid one">
       <div class="card">
         <h3>Choose a mode</h3>
@@ -50,6 +43,8 @@
           <div>
             <div class="label">Difficulty</div>
             <div class="segmented" role="radiogroup" aria-label="Difficulty">
+              <input type="radio" id="diff-easy" name="difficulty" value="easy">
+              <label for="diff-easy">Amrita Mode</label>
               <input type="radio" id="diff-medium" name="difficulty" value="medium" checked>
               <label for="diff-medium">Medium</label>
               <input type="radio" id="diff-hard" name="difficulty" value="hard">
@@ -108,7 +103,6 @@
         <div class="meta-row">
           <div id="qType" class="muted"></div>
           <span class="pill" id="qProgLabel">Elapsed: 00:00</span>
-
         </div>
         <h2 id="questionText"></h2>
         <div id="focusBox" class="big-box hidden"></div>
@@ -135,31 +129,45 @@
             <input id="initials" maxlength="4" placeholder="ABC" />
           </label>
           <button id="saveScore">Save Score</button>
+          <button id="viewReview" class="secondary">Review answers</button>
           <button id="playAgain" class="secondary">Play again</button>
           <button id="backHome2" class="ghost">Home</button>
         </div>
       </div>
     </section>
 
-    <!-- LEARN LANDING -->
+    <!-- REVIEW / REFLECTION -->
+    <section id="review" class="grid one hidden">
+      <div class="card">
+        <h3>Review & Reflection</h3>
+        <div class="brand-sub" style="margin:6px 0 10px;">
+          Hover any <strong>generic</strong> chip to open a pop-up with Class & Brand names. Click a chip to pin/unpin; drag pop-ups by the handle.
+        </div>
+        <div id="reviewList" class="review-list"></div>
+        <div class="row right mt8">
+          <button id="reviewBack" class="ghost">Back</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEARN LANDING (with category picker) -->
     <section id="learnLanding" class="grid one hidden">
       <div class="card">
         <h3>Learn</h3>
         <div class="stack">
           <div class="segmented" role="radiogroup" aria-label="Learn Mode">
             <input type="radio" id="learn-all" name="learnmode" value="all" checked>
-            <label for="learn-all">Learn from all the data</label>
+            <label for="learn-all">Learn from all data</label>
             <input type="radio" id="learn-select" name="learnmode" value="select">
             <label for="learn-select">Select categories</label>
           </div>
 
-          <!-- Category picker (inline for learn) -->
+          <!-- Category panel (hidden until "select" chosen) -->
           <div id="learnCatPanel" class="cat-panel hidden">
             <div class="row wrap">
               <input id="learnCatSearch" class="search" placeholder="Search categories…" />
               <button id="learnSelectAll" class="ghost">Select all</button>
               <button id="learnClearAll" class="ghost">Clear</button>
-              <button id="startLearnSelected" class="secondary">Continue</button>
             </div>
             <div class="cat-table-wrap">
               <table class="cat-table" id="learnCatTable">
@@ -171,6 +179,7 @@
 
           <div class="row wrap">
             <button id="startLearnAll">Start Learning</button>
+            <button id="startLearnSelected" class="secondary">Continue with selection</button>
             <button id="backHome3" class="ghost">Back</button>
           </div>
         </div>
@@ -245,7 +254,17 @@
     </div>
   </div>
 
+  <!-- Ephemeral hover card template -->
+  <div id="hoverCard" class="hovercard hidden">
+    <div class="hc-title" id="hcTitle">Generic</div>
+    <div class="hc-section"><div class="fc-label">Class</div><div class="fc-body" id="hcClass">—</div></div>
+    <div class="hc-section"><div class="fc-label">Brand names</div><div class="fc-body" id="hcBrands">—</div></div>
+    <div class="hc-handle" title="Drag">↕</div>
+  </div>
+
+  <!-- Confetti stage -->
   <div class="confetti-wrap" id="confetti"></div>
+
   <script src="script.js"></script>
 </body>
 </html>
