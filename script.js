@@ -195,7 +195,8 @@ function show(...ids){
 // ---------- Confetti (fixed) ----------
 function confettiBurst(){
   const wrap = els.confetti;
-  const colors = ["#c49db4","#a98aa4","#e2d5dc","#d7b9c9","#a3d8c3","#cdeee4","#ffd6a5","#caffbf"];
+  const colors = ["#ff0095ff","#ff00d9ff","#9e306bff","#e7afcdff","#e177dfff","#9235a9ff","#992f8dff","#d830e1ff"];
+  // const colors = ["#c49db4","#a98aa4","#e2d5dc","#d7b9c9","#a3d8c3","#cdeee4","#ffd6a5","#caffbf"];
   for(let i=0;i<120;i++){
     const d = document.createElement("div");
     d.className = "confetti";
